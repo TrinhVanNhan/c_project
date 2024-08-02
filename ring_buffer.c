@@ -50,7 +50,7 @@ int RINGBUFFER_get(RINGBUFER *r, uint8_t *value) // ham get data tu buffer
 	}
 	*value = r->pt[r->tail];
 	r->tail++;
-	if(r->tail >= r->size) // doc het thi reset cho no doc lai
+	if(r->tail >= r->size) // read het thi reset cho no doc lai
 	{
 		r->tail = 0;
 	}
