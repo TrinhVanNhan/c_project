@@ -35,7 +35,7 @@ int RINGBUFFER_put(RINGBUFER *r, uint8_t value) // ham put data vao buffer
 	{
 		temp = 0;
 	}
-	if(temp >= r->tail) // check full
+	if(temp == r->tail) // check full
 	{
 		return -1;
 	}
