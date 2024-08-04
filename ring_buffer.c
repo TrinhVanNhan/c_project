@@ -17,7 +17,7 @@ khac voi queue thi ringbufer ghi lien tuc duoc
 */
 int RINGBUFFER_init(RINGBUFER *r, uint8_t *buf, uint32_t size) // chuyen vao cac thong so: khoi tao Ringbufer, buf chua data, size bufer
 {
-	if(r->pt == NULL||buf == NULL||size<2)
+	if(r == NULL||buf == NULL||size<2)
 	{
 		return -1;
 	}
