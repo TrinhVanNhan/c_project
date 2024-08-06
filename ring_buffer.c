@@ -5,8 +5,8 @@
 #include<stdlib.h>
 // khai bao buffer
 typedef struct{
-volatile uint32_t head; // khoi tao gia tri phan tu dau = front trong queue tron ( coi nhu con tro ghi )
-volatile uint32_t tail; // khoi tao gia tri phan tu cuoi = rear trong queue tron ( coi nhu con tro doc) 
+volatile uint32_t head; // khoi tao gia tri phan tu dau = front nhưng công dụng lại để ghi chứ không phải để đọc như front trong queue tron ( coi như con tro ghi )
+volatile uint32_t tail; // khoi tao gia tri phan tu cuoi = rear nhưng công dụng lại để đọc ra( lấy dữ liệu ra) như rear trong queue tron ( coi như con tro đọc) 
 volatile uint32_t size; // size cua buffer
 volatile uint8_t *pt; // con tro chi den buffer cua ring
 }RINGBUFER;
@@ -50,7 +50,7 @@ int RINGBUFFER_get(RINGBUFER *r, uint8_t *value) // ham get data tu buffer
 	}
 	*value = r->pt[r->tail];
 	r->tail++;
-	if(r->tail >= r->size) // doc het thi reset cho no doc lai
+	if(r->tail >= r->size) // read het thi reset cho no doc lai
 	{
 		r->tail = 0;
 	}
