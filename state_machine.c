@@ -14,6 +14,7 @@ typedef struct{
 	char mssv[5];
 	char toan;
 }infor_t;
+
 int nhap(infor_t *sv,int n)
 {
 	int i=0;
