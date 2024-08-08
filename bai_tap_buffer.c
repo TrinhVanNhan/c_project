@@ -3,6 +3,8 @@
 #include<stdint.h>
 #include<string.h>
 #include<math.h>
+#include<pthread.h>
+#include<windows.h>
 typedef struct{
 volatile uint32_t head; // con tro den vi tri dau, dung de ghi vao
 volatile uint32_t tail; // con tro den vi tri cuoi, dung de doc ra
@@ -61,28 +63,45 @@ int ring_buffer_printf(BUFFER_t *r)
 		printf("---%d\n",r->pt[i]);
 	}
 }
+BUFFER_t ring;
+uint8_t buf[100];
+uint8_t dataput = 0;
+uint8_t dataget;
+/*
+tao ra hai task de chay: mot task truyen và mot task nhan du lieu
+*/
+void *thread1(void *para)
+{
+	while(1)
+	{
+		RINGBUFFER_put(&ring,dataput);
+		printf("-->%d\n",dataput);
+		dataput++;
+		if(dataput>254)
+		{
+			dataput = 0;
+		}
+		sleep(1);
+	}
+}
+void *thread2(void *para)
+{
+	while(1)
+	{
+		RINGBUFFER_get(&ring,&dataget);
+		printf("data -> %d\n",dataget);
+		sleep(2);
+	}
+}
  int main()
 {
-	uint8_t ch;
-	buffer_init(&ring,buffer,5);
-	//while(1)
-	//{
-	RINGBUFFER_put(&ring, 1);
-	RINGBUFFER_put(&ring, 2);
-	RINGBUFFER_put(&ring, 3);
-	RINGBUFFER_put(&ring, 4);
-	RINGBUFFER_put(&ring, 5);
-	RINGBUFFER_put(&ring, 6);
-	ring_buffer_printf(&ring);
-	RINGBUFFER_get(&ring, &ch);
-	printf("-> %d\n",ch);
-	RINGBUFFER_get(&ring, &ch);
-	printf("-> %d\n",ch);
-	RINGBUFFER_get(&ring, &ch);
-	printf("-> %d\n",ch);
-	RINGBUFFER_get(&ring, &ch);
-	printf("-> %d\n",ch);
-	ring_buffer_printf(&ring);
-	//}
+	buffer_init(&ring,buf,100);
+	pthread_t thread_id1;
+	pthread_t thread_id2;
+	pthread_create(&thread_id1, NULL, thread1, NULL);
+	pthread_create(&thread_id2, NULL, thread2, NULL);
+	pthread_join(thread_id1,NULL);
+	pthread_join(thread_id2,NULL);
+	exit(0);
 	return 0;
 }
